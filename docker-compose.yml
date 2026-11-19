@@ -1,0 +1,26 @@
+services:
+  tv-govee-sync:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tv-govee-sync
+    restart: unless-stopped
+    user: "1000:1000"
+    read_only: true
+    tmpfs:
+      - /tmp:size=1M,noexec,nosuid
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      TZ: Europe/Berlin
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      POLL_INTERVAL: ${POLL_INTERVAL:-10}
+      TV_IP: ${TV_IP:-192.168.1.2}
+      TV_PORT: ${TV_PORT:-8002}
+      TV_TIMEOUT: ${TV_TIMEOUT:-4.0}
+      GOVEE_API_KEY: ${GOVEE_API_KEY:?GOVEE_API_KEY must be set in Portainer}
+      GOVEE_AUTH_HEADER: ${GOVEE_AUTH_HEADER:-Govee-API-Key}
+      GOVEE_SKU: ${GOVEE_SKU:-H6199}
+      GOVEE_DEVICE_ID: ${GOVEE_DEVICE_ID:-AA:BB:CC:DD:55:66:77:88}
